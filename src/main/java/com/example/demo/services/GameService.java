@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.DTO.GameDTO;
 import com.example.demo.DTO.GameMinDTO;
 import com.example.demo.entities.Game;
+import com.example.demo.projections.GameMinProjection;
 import com.example.demo.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,20 @@ public class GameService {
         return result.stream().map(x -> new GameMinDTO(x)).toList();
 
     }
+
     @Transactional(readOnly = true)
-    public GameDTO findById( Long id){
+    public GameDTO findById(Long id) {
         Game game = repository.findById(id).get();
 
         return new GameDTO(game);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId) {
+
+        List<GameMinProjection> result = repository.searchByList(listId);
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
 
     }
 
